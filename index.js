@@ -2,7 +2,8 @@ import express from "express";
 import dotenv from 'dotenv';
 import morgan from "morgan";
 import connectDB from "./config/db.js";
-import ProductRoutes from "./models/productRoutes.js";
+import ProductRoutes from "./routes/productRoutes.js";
+import CategoryRoutes from "./routes/categoryRoutes.js";
 
 dotenv.config();
 
@@ -18,6 +19,8 @@ if(process.env.NODE_ENV === "development"){
 app.use(express.json());
 
 app.use("/product", ProductRoutes);
+app.use("/category", CategoryRoutes);
+
 
 
 app.listen(

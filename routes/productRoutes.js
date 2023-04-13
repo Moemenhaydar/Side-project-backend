@@ -6,7 +6,7 @@ import {
   getProduct,
   deleteProduct,
   editProduct,
-} from "../controllers/ProductController.js";
+} from "../controllers/productController.js";
 
 
 router.post("/", createProduct);

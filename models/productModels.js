@@ -18,18 +18,21 @@ const productSchema =new Schema({
         required:true,
     },
     category:{
-        type:String,
+        type:Schema.Types.ObjectId,
         required:true,
+        ref:"Category"
     },
     image:{
         type:String,
         required:true,
     },
-    timetamps:{
-        createdAt:"created_at",
-        updatedAt:"updated_at",
-    },
+    
 
+},{
+    timestamps:true
 })
-const Product = model ("Product" , productSchema);
+productSchema.pre(['find','findOne'],function(){
+    this.populate(['category'])
+})
+const Product = model("Product" , productSchema);
 export default Product;
