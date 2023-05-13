@@ -39,8 +39,6 @@ const ownerSchema = new Schema({
     default: true,
   },
 });
-ownerSchema.pre(["find", "findOne"], function () {
-  this.populate(["category"]);
-});
+
 const Owner = model("Owner", ownerSchema);
 export default Owner;
