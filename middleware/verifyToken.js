@@ -14,7 +14,7 @@ export const verifyOwner = async (req, res, next) => {
       next();
     } catch (error) {
       res.status(401).json({ success: false, error: 'You must be logged in' });
-    }
+    } 
   };
   
 export const verifyAdmin=async (req, res, next)=>{
