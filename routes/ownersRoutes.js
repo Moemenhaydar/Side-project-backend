@@ -6,10 +6,11 @@ import {
     getOwner,
     deleteOwner,
     editOwner,
+    login,
 } from "../controllers/ownersController.js";
 // import OwnerController from "../controllers/ownersController";
 import upload from "../middleware/image.js"
-
+router.post("/login",login)
 router.post("/",upload, createOwner);
 router.get("/", getOwners);
 router.get("/:id", getOwner);
