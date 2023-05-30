@@ -66,15 +66,16 @@ export async function login(req, res, next) {
       .json({ success: false, message: "please enter email and password" });
   }
   const response = await Owner.findOne({ email });
+  console.log(response)
   if (!response) {
     return res.status(401).json({ success: false, message: "Email not found" });
   }
-  if (await bcrypt.compare(password,response.password)) {
+  if (!await bcrypt.compare(password,response.password)) {
     return res
       .status(401)
       .json({ success: false, message: "Password is incorrect" });
   }
-  const token = jwt.sign({ _id: response._id }, process.env.JWT_SECRET, {
+  const token = jwt.sign({ _id: response._id,role:"owner" }, process.env.JWT_SECRET, {
     expiresIn: "1d",
   });
   res.status(200).json({

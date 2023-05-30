@@ -1,3 +1,10 @@
+import Admin from "../models/adminModels";
+import Owner from "../models/ownersModels";
+
+const userRole={
+  "admin":Admin,
+  "owner":Owner
+}
 export const verifyOwner = async (req, res, next) => {
     const { authorization } = req.headers;
   
@@ -7,27 +14,25 @@ export const verifyOwner = async (req, res, next) => {
   
     
     const token = authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const { role} = decoded;
+    const Model= userRole[role] ;
+    req.role=role
+    req.user = await Model.findById( decoded._id );
+    if(!req.user){
+      return res.status(401).send({success:false,message:`no ${role} found`})
+    }
+    next();
   
-    try {
-      const { _id } = jwt.verify(token, process.env.SECRET_KEY);
-      req.user = await User.findById(_id);
-      next();
-    } catch (error) {
-      res.status(401).json({ success: false, error: 'You must be logged in' });
-    } 
   };
   
-export const verifyAdmin=async (req, res, next)=>{
-    const {authorization} = req.headers
-    if(!authorization){
-        return res.status(401).json({success: false, error:'Authorization required'});
-        }
-        const token = authorization.split(' ')[1];
-    try {
-        const {_id}= jwt.verify(token, process.env.SECRET_KEY)
-        req.user = await User.findById(_id)
-        next();
-        } catch (error) {
-            res.status(401).json({success: false, error: 'You must be logged in'})
-            }
-    };
+export const allowAcces=(array)=>{
+  return (req,res,next)=>{
+    if(array.includes(req.role)){
+      next()
+    }
+    else{
+      return res.status(401).json({success:false,error:"you are not authorized to access this route"})
+      }
+  }
+}

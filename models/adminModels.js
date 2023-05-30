@@ -1,5 +1,9 @@
 import mongoose from "mongoose";
 const {Schema,model}=mongoose;
+var validateEmail = function (email) {
+    var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return re.test(email);
+  };
 const adminSchema =new Schema({
     name:{
         type:String,

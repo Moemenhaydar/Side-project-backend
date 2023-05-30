@@ -5,6 +5,8 @@ import connectDB from "./config/db.js";
 import ProductRoutes from "./routes/productRoutes.js";
 import CategoryRoutes from "./routes/categoryRoutes.js";
 import OwnerRoutes from "./routes/ownersRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
+import cors from "cors"
 // import { registerAdmin } from "./controllers/adminController.js";
 
 dotenv.config();
@@ -18,12 +20,13 @@ const app = new express();
 if(process.env.NODE_ENV === "development"){
     app.use(morgan('dev'));
 }
+app.use(cors())
 app.use(express.json());
 
 app.use("/product", ProductRoutes);
 app.use("/category", CategoryRoutes);
-app.use("/owner",OwnerRoutes)
-// app.use("/admin", )
+app.use("/owner",OwnerRoutes);
+app.use("/admin",adminRoutes );
 
 
 

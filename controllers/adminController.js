@@ -1,14 +1,20 @@
 import Admin from "../models/adminModels.js"
+import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
 export function createAdmin(req, res, next) {
+  let password=req.body.password
+  // let salt = bcrypt.genSaltSync(10)
+  let hash = bcrypt.hashSync(password, 10)
+  req.body.password=hash
   const admin = new Admin(req.body);
   admin.save().then((response) => {
     res
       .status(200)
       .send({ status: 201, message: response })
-      .catch((err) => {
-        next(err);
-      });
-  });
+      
+  }).catch((err) => {
+    next(err);
+  });;
 }
 
 export function getAdmins(req, res, next) {
@@ -67,17 +73,18 @@ export async function login(req, res, next) {
     if (!response) {
       return res.status(401).json({ success: false, message: "Email not found" });
     }
-    if (await bcrypt.compare(password,response.password)) {
+    if (!await bcrypt.compare(password,response.password)) {
       return res
         .status(401)
         .json({ success: false, message: "Password is incorrect" });
     }
-    const token = jwt.sign({ _id: response._id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ _id: response._id ,role:"admin"}, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
     res.status(200).json({
       success: true,
       message: "Login Successful",
+      user:response,
       token,
     });
   }
