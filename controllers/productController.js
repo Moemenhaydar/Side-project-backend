@@ -6,19 +6,19 @@ export function createProduct(req, res, next) {
     res
       .status(200)
       .send({ status: 201, message: response })
-      .catch((err) => {
-        next(err);
-      });
-  });
+      
+  }).catch((err) => {
+    next(err);
+  });;
 }
 
 export function getProducts(req, res, next) {
-  Product.find({})
-    .then((data) => {
+  const data = Product.find({});
+   data .then((data) => {
       res.status(200).send({ status: 200, message: data });
     })
     .catch((err) => {
-      next(err);
+      res.status(400).send({ message: err });
     });
 }
 export function getProduct(req, res, next) {
