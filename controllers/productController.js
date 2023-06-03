@@ -12,15 +12,23 @@ export function createProduct(req, res, next) {
   });;
 }
 
-export function getProducts(req, res, next) {
-  const data = Product.find({});
-   data .then((data) => {
-      res.status(200).send({ status: 200, message: data });
-    })
-    .catch((err) => {
-      res.status(400).send({ message: err });
-    });
+export async function getProducts(req, res, next) {
+  const filter = {};
+
+  if (req.query.cat) {
+    filter.category = req.query.cat;
+  }
+
+  console.log(filter);
+  try {
+    const data = await Product.find(filter).exec(); // Execute the query immediately
+    res.status(200).send({ status: 200, message: data });
+  } catch (err) {
+    res.status(400).send({ message: err });
+  }
 }
+
+
 export function getProduct(req, res, next) {
   const { id } = req.params;
   Product.findById({ _id: id })

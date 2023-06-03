@@ -16,7 +16,7 @@ await connectDB();
 const PORT =process.env.PORT || 8000;
 
 const app = new express();
-
+app.use("/uploads",express.static("uploads"))
 if(process.env.NODE_ENV === "development"){
     app.use(morgan('dev'));
 }
