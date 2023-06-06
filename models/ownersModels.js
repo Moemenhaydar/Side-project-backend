@@ -31,7 +31,6 @@ const ownerSchema = new Schema({
   },
   social_media: {
     type: Array,
-    required: true,
   },
   address: {
     type: String,
@@ -39,7 +38,6 @@ const ownerSchema = new Schema({
   },
   about: {
     type: String,
-    required: true,
   },
   image: {
     type: String,
